@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [develop]
+
+jobs:
+  backend:
+    name: Symfony — lint + tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mongodb, intl, zip
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+
+      - name: Créer le .env pour CI
+        run: |
+          echo "APP_ENV=test" > backend/.env
+          echo "APP_SECRET=secret_for_ci_only" >> backend/.env
+
+      - name: Install deps
+        run: composer install --working-dir=backend --prefer-dist --no-progress --no-scripts
+
+      - name: PHPStan
+        run: cd backend && vendor/bin/phpstan analyse --no-progress
+
+      - name: PHPUnit
+        run: cd backend && vendor/bin/phpunit
+
+  frontend:
+    name: Next.js — lint + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci --prefix frontend
+      - run: npm run lint --prefix frontend
+      - run: npm run build --prefix frontend
