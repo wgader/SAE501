@@ -31,7 +31,7 @@ jobs:
           echo "APP_SECRET=secret_for_ci_only" >> backend/.env
 
       - name: Install deps
-        run: composer install --working-dir=backend --prefer-dist --no-progress
+        run: composer install --working-dir=backend --prefer-dist --no-progress --no-scripts
 
       - name: PHPStan
         run: cd backend && vendor/bin/phpstan analyse --no-progress
