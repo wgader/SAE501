@@ -9,16 +9,20 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> phpstan/phpstan ###
-phpstan.neon
-###< phpstan/phpstan ###
-
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/
 ###< phpunit/phpunit ###
 
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-backend/config/jwt/*.pem
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
