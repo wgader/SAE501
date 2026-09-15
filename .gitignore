@@ -16,6 +16,7 @@ backend/vendor/
 backend/var/
 backend/.php-cs-fixer.cache
 backend/phpunit.xml
+backend/config/jwt/*.pem
 
 # ── Docker (données locales) ───────────────────
 mongo_data/
