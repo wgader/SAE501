@@ -33,24 +33,41 @@ services:
       retries: 5
       start_period: 30s
     depends_on:
-      mongo:
+      mysql:
         condition: service_healthy
     networks:
       - app_network
 
-  mongo:
-    image: mongo:7
+  mysql:
+    image: mysql:8.4
     ports:
-      - "27017:27017"
+      - "3306:3306"
     environment:
-      MONGO_INITDB_DATABASE: ${MONGODB_DB:-myapp}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - mongo_data:/data/db
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks:
       - app_network
 
@@ -59,6 +76,6 @@ networks:
     name: myapp_network
 
 volumes:
-  mongo_data:
+  mysql_data:
   caddy_data:
   caddy_config:

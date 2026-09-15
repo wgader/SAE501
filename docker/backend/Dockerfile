@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:1.12-php8.4-alpine
+FROM dunglas/frankenphp:1.12-php8.5-alpine
 
 COPY docker/backend/php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY docker/backend/Caddyfile /etc/caddy/Caddyfile
@@ -7,7 +7,7 @@ RUN install-php-extensions \
     intl \
     zip \
     opcache \
-    mongodb \
+    pdo_mysql \
     @composer
 
 WORKDIR /app
