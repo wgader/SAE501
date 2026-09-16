@@ -32,6 +32,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $prenom = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $typeCompte = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Association $association = null;
+
+    #[ORM\Column(length: 6, nullable: true)]
+    private ?string $emailVerificationCode = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $emailVerificationCodeExpiresAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,5 +132,113 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
         
         return $data;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getTypeCompte(): ?string
+    {
+        return $this->typeCompte;
+    }
+
+    public function setTypeCompte(string $typeCompte): static
+    {
+        $this->typeCompte = $typeCompte;
+
+        return $this;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getAssociation(): ?Association
+    {
+        return $this->association;
+    }
+
+    public function setAssociation(?Association $association): static
+    {
+        $this->association = $association;
+
+        return $this;
+    }
+
+    public function getEmailVerificationCode(): ?string
+    {
+        return $this->emailVerificationCode;
+    }
+
+    public function setEmailVerificationCode(string $emailVerificationCode): static
+    {
+        $this->emailVerificationCode = $emailVerificationCode;
+
+        return $this;
+    }
+
+    public function getEmailVerificationCodeExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->emailVerificationCodeExpiresAt;
+    }
+
+    public function setEmailVerificationCodeExpiresAt(\DateTimeImmutable $emailVerificationCodeExpiresAt): static
+    {
+        $this->emailVerificationCodeExpiresAt = $emailVerificationCodeExpiresAt;
+
+        return $this;
     }
 }
